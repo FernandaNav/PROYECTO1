@@ -2,6 +2,7 @@
 
 int opcion = 0;
 Mensajes mensaje = new Mensajes();
+Estacionamiento estacionamiento = new Estacionamiento();
 do
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -21,8 +22,15 @@ do
         switch (opcion)
         {
             case 1:
+                Console.Clear();
+                estacionamiento.AgregarVehiculo();
                 break;
             case 2:
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("             RETIRAR VEHÍCULO");
+                Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
                 break;
             case 3:
                 break;
