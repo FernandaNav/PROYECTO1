@@ -13,6 +13,7 @@ namespace PROYECTO1
         List<Auto> listaAutos = new List<Auto>();
         List<Motocicleta> listaMotocicletas = new List<Motocicleta>();
         List<Camion> listaCamiones = new List<Camion>();
+        List<Vehiculo> listaVehiculos = new List<Vehiculo>();
         Mensajes mensaje = new Mensajes();
 
         public void IngresarVehiculo()
@@ -21,6 +22,7 @@ namespace PROYECTO1
             bool sideCarM = false;
             do
             {
+                Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("--------------------------------------------");
                 Console.WriteLine("             INGRESAR VEHÍCULO");
@@ -64,6 +66,7 @@ namespace PROYECTO1
                             int cantidadDePuertas = Convert.ToInt32( Console.ReadLine());
                             Auto nuevoAuto = new Auto(placaA, marcaA, modeloA, colorA, horaA, cantidadDePuertas);
                             listaAutos.Add(nuevoAuto);
+                            listaVehiculos.Add(nuevoAuto);
                             mensaje.RegistroExitoso();
                             mensaje.Continuar();
                             break;
@@ -96,6 +99,7 @@ namespace PROYECTO1
                                 sideCarM = true;
                             Motocicleta nuevaMoto = new Motocicleta(placaM, marcaM, modeloM, colorM, horaM, sideCarM);
                             listaMotocicletas.Add(nuevaMoto);
+                            listaVehiculos.Add(nuevaMoto);
                             mensaje.RegistroExitoso();
                             mensaje.Continuar();
                             break;
@@ -126,6 +130,7 @@ namespace PROYECTO1
                             decimal capacidadDeCarga = Convert.ToDecimal(Console.ReadLine());
                             Camion nuevoCamion = new Camion(placaC, marcaC, modeloC, colorC, horaC, capacidadDeCarga);
                             listaCamiones.Add(nuevoCamion);
+                            listaVehiculos.Add(nuevoCamion);
                             mensaje.RegistroExitoso();
                             mensaje.Continuar();
                             break;
@@ -145,8 +150,16 @@ namespace PROYECTO1
         public void RetirarVehiculo()
         {
             int opcionRetirar = 0;
+            if (listaVehiculos.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("No hay vehículos estacionados.");
+                mensaje.Continuar();
+                return;
+            }
             do
             {
+                Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("--------------------------------------------");
                 Console.WriteLine("              RETIRAR VEHÍCULO");
@@ -156,13 +169,21 @@ namespace PROYECTO1
                 Console.WriteLine("3. Camnión");
                 Console.WriteLine("4. Regresar al menú principal\n");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write("Ingresa el tipo de vehículo: ");
+                Console.Write("Ingresa el tipo de vehículo a retirar: ");
             } while (opcionRetirar != 4);
+        }
+
+        private int CalcularHorasEstacionado(DateTime horaSalida, DateTime horaEntrada)
+        {
+            TimeSpan tiempoTranscurrido = horaSalida - horaEntrada;
+            double minutosTotales = tiempoTranscurrido.TotalMinutes;
+            int horasRedondeadas = (int)Math.Ceiling(minutosTotales / 60);
+            return horasRedondeadas;
         }
 
         public void VisualizarVehiculos()
         {
-            if (listaAutos.Count == 0 && listaCamiones.Count == 0 && listaMotocicletas.Count == 0)
+            if (listaVehiculos.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("No hay vehículos estacionados.");
@@ -202,6 +223,36 @@ namespace PROYECTO1
                 }
             }
             mensaje.Continuar();
+        }
+
+        public void EspaciosDisponibles()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("          VEHÍCULOS ESTACIONADOS");
+            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+            Console.ForegroundColor= ConsoleColor.DarkYellow;
+            Console.WriteLine("Espacios destinados para autos: 3"); Console.ResetColor();
+            int espaciosAutos = (3-listaAutos.Count);
+            Console.WriteLine($"Espacios disponibles: {espaciosAutos}\n");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("Espacios destinados para motocicletas: 5"); Console.ResetColor();
+            int espaciosMotos = (5 - listaMotocicletas.Count);
+            Console.WriteLine($"Espacios disponibles: {espaciosMotos}\n");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("Espacios destinados para camiones: 1"); Console.ResetColor();
+            int espaciosCamiones = (1 - listaCamiones.Count);
+            Console.WriteLine($"Espacios disponibles: {espaciosCamiones}\n");
+            mensaje.Continuar();
+        }
+        public void Salida()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("   Que tenga un buen día...");
+            Console.WriteLine("-------------------------------"); Console.ResetColor();
         }
     }
 }

@@ -22,24 +22,19 @@ do
         switch (opcion)
         {
             case 1:
-                Console.Clear();
                 estacionamiento.IngresarVehiculo();
                 break;
             case 2:
-                Console.Clear();
+                estacionamiento.RetirarVehiculo();
                 break;
             case 3:
                 estacionamiento.VisualizarVehiculos();
                 break;
             case 4:
-                Console.Clear();
+                estacionamiento.EspaciosDisponibles();
                 break;
             case 5:
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("-------------------------------");
-                Console.WriteLine("   Que tenga un buen día...");
-                Console.WriteLine("-------------------------------"); Console.ResetColor();
+                estacionamiento.Salida();
                 break;
             default:
                 mensaje.Default();
