@@ -23,18 +23,16 @@ do
         {
             case 1:
                 Console.Clear();
-                estacionamiento.AgregarVehiculo();
+                estacionamiento.IngresarVehiculo();
                 break;
             case 2:
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("             RETIRAR VEHÍCULO");
-                Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
                 break;
             case 3:
+                estacionamiento.VisualizarVehiculos();
                 break;
             case 4:
+                Console.Clear();
                 break;
             case 5:
                 Console.Clear();

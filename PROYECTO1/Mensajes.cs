@@ -26,5 +26,12 @@ namespace PROYECTO1
             Console.WriteLine("Esta opción no existe"); Console.ResetColor();
             Continuar();
         }
+
+        public void RegistroExitoso()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("\nVehículo ingresado correctamente.");
+            Console.ResetColor();
+        }
     }
 }

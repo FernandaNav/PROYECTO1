@@ -16,8 +16,6 @@ namespace PROYECTO1
         }
         public override void MostrarVehiculos()
         {
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Tipo de vehículo: camión"); Console.ResetColor();
             base.MostrarVehiculos();
             Console.WriteLine($"Capacidad de carga: {CapacidadDeCarga}");
         }

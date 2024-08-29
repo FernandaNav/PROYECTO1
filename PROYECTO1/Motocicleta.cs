@@ -17,8 +17,6 @@ namespace PROYECTO1
         }
         public override void MostrarVehiculos()
         {
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Tipo de vehículo: motocicleta"); Console.ResetColor();
             base.MostrarVehiculos();
             if (SideCar==true)
             {

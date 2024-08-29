@@ -17,8 +17,6 @@ namespace PROYECTO1
 
         public override void MostrarVehiculos()
         {
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Tipo de Vehículo: Auto"); Console.ResetColor();
             base.MostrarVehiculos();
             Console.WriteLine($"Cantidad de puertas: {CantidadDePuertas}");
         }
