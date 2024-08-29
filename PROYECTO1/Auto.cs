@@ -9,7 +9,7 @@ namespace PROYECTO1
     public class Auto: Vehiculo
     {
         public int CantidadDePuertas {  get; set; }
-        public Auto(string placa, string marca, string modelo, string color, DateTime horaDeEntrada, int cantidadDePuertas)
+        public Auto(string placa, string marca, string modelo, string color, TimeOnly horaDeEntrada, int cantidadDePuertas)
             :base(placa, marca, modelo, color, horaDeEntrada)
         {
             CantidadDePuertas = cantidadDePuertas;

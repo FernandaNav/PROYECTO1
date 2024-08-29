@@ -10,7 +10,7 @@ namespace PROYECTO1
     {
         private bool SideCar {  get; set; }
 
-        public Motocicleta(string placa, string marca, string modelo, string color, DateTime horaDeEntrada, bool sideCar) 
+        public Motocicleta(string placa, string marca, string modelo, string color, TimeOnly horaDeEntrada, bool sideCar) 
             :  base(placa, marca, modelo, color, horaDeEntrada)
         {
             SideCar = sideCar;

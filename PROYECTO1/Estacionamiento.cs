@@ -60,7 +60,7 @@ namespace PROYECTO1
                             string modeloA = Console.ReadLine();
                             Console.Write("Ingresa la color: ");
                             string colorA = Console.ReadLine();
-                            DateTime horaA = DateTime.Now;
+                            TimeOnly horaA = TimeOnly.FromDateTime(DateTime.Now);
                             Console.WriteLine($"Fecha y hora de salida: {horaA}");
                             Console.Write("Ingresa la cantidad de puertas: ");
                             int cantidadDePuertas = Convert.ToInt32( Console.ReadLine());
@@ -91,7 +91,7 @@ namespace PROYECTO1
                             string modeloM = Console.ReadLine();
                             Console.Write("Ingresa la color: ");
                             string colorM = Console.ReadLine();
-                            DateTime horaM = DateTime.Now;
+                            TimeOnly horaM = TimeOnly.FromDateTime(DateTime.Now);
                             Console.WriteLine($"Fecha y hora de salida: {horaM}");
                             Console.Write("¿La motocicleta tiene sidecar? (SI/NO)");
                             string sideCar = Console.ReadLine();
@@ -124,7 +124,7 @@ namespace PROYECTO1
                             string modeloC = Console.ReadLine();
                             Console.Write("Ingresa la color: ");
                             string colorC = Console.ReadLine();
-                            DateTime horaC = DateTime.Now;
+                            TimeOnly horaC = TimeOnly.FromDateTime(DateTime.Now);
                             Console.WriteLine($"Fecha y hora de salida: {horaC}");
                             Console.Write("Ingresa la capacidad de carga (kg): ");
                             decimal capacidadDeCarga = Convert.ToDecimal(Console.ReadLine());
@@ -157,23 +157,100 @@ namespace PROYECTO1
                 mensaje.Continuar();
                 return;
             }
-            do
-            {
+            //do
+            //{
+                bool vehiculoEncontrado = false;
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("--------------------------------------------");
                 Console.WriteLine("              RETIRAR VEHÍCULO");
                 Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-                Console.WriteLine("1. Auto");
-                Console.WriteLine("2. Motocicleta");
-                Console.WriteLine("3. Camnión");
-                Console.WriteLine("4. Regresar al menú principal\n");
+                Console.Write("Ingresa la placa del vehículo: ");
+                string placaRetirar = Console.ReadLine();
+                foreach(var vehiculo in listaVehiculos)
+                {
+                    if (vehiculo.Placa.ToLower() == placaRetirar)
+                    {
+                        TimeOnly horaSalida = TimeOnly.FromDateTime(DateTime.Now);
+                        int horas = CalcularHorasEstacionado(horaSalida, vehiculo.HoraDeEntrada);
+                        Console.WriteLine("Cantidad de horas pasadas: "+horas);
+                        mensaje.Continuar();
+                        ProcesoDePago(10);
+                    }
+                }
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write("Ingresa el tipo de vehículo a retirar: ");
-            } while (opcionRetirar != 4);
+            //} while (opcionRetirar != 4);
+        }
+        private void ProcesoDePago(decimal monto)
+        {
+            int opcionPago = 0;
+            do
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("              PROCESO DE PAGO");
+                Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+                Console.WriteLine("1. Pago en efectivo");
+                Console.WriteLine("2. Pago con tarjeta");
+                Console.WriteLine("3. Regresar al menú principal\n");
+                Console.Write("Ingresa la opción de pago: ");
+                try
+                {
+                    opcionPago = Convert.ToInt32(Console.ReadLine());
+                    switch (opcionPago)
+                    {
+                        case 1:
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("--------------------------------------------");
+                            Console.WriteLine("              PAGO EN EFECTIVO");
+                            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+                            Console.WriteLine("Ingresa el billete con el que pagarás: Q20");
+                            Console.WriteLine("Tu cambio es de 1 billete de Q10");
+                            mensaje.Continuar();
+                            break;
+                        case 2:
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("--------------------------------------------");
+                            Console.WriteLine("              PAGO CON TARJETA");
+                            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+                            Console.Write("Ingresa el número de tarjeta: ");
+                            int numeroTarjeta = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Ingresa el nombre del titular: ");
+                            string nombreTitular = Console.ReadLine();
+                            Console.Write("Ingresa el año de vencimiento: ");
+                            int anioVencimiento = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Ingresa el mes de vencimiento: ");
+                            int mesVencimiento = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Ingresa el día de vencimiento: ");
+                            int diaVencimiento = Convert.ToInt32(Console.ReadLine());
+                            DateOnly fechaDeVencimiento = new DateOnly(anioVencimiento, mesVencimiento, diaVencimiento);
+                            Console.Write("CVV: ");
+                            int cvv = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("proceso de pago");
+                            mensaje.Continuar();
+                            break;
+                        case 3:
+                            Console.Clear();
+                            break;
+                        default:
+                            mensaje.Default();
+                            mensaje.Continuar();
+                            break;
+                    }
+                }
+                catch (FormatException)
+                {
+                    mensaje.ErrorDeFormato();
+                    mensaje.Continuar();
+                }
+            } while (opcionPago != 3);
+
         }
 
-        private int CalcularHorasEstacionado(DateTime horaSalida, DateTime horaEntrada)
+        private int CalcularHorasEstacionado(TimeOnly horaSalida, TimeOnly horaEntrada)
         {
             TimeSpan tiempoTranscurrido = horaSalida - horaEntrada;
             double minutosTotales = tiempoTranscurrido.TotalMinutes;

@@ -9,7 +9,7 @@ namespace PROYECTO1
     public class Camion:Vehiculo
     {
         public decimal CapacidadDeCarga {  get; set; }
-        public Camion(string placa, string marca, string modelo, string color, DateTime horaDeEntrada, decimal capacidadDeCarga)
+        public Camion(string placa, string marca, string modelo, string color, TimeOnly horaDeEntrada, decimal capacidadDeCarga)
             :base (placa, marca, modelo, color, horaDeEntrada)
         {
             CapacidadDeCarga = capacidadDeCarga;

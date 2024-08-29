@@ -12,9 +12,9 @@ namespace PROYECTO1
         protected string Marca {  get; set; }
         protected string Modelo { get; set; }
         protected string Color { get; set; }
-        protected DateTime HoraDeEntrada { get; set; }
+        public TimeOnly HoraDeEntrada { get; set; }
 
-        public Vehiculo(string placa, string marca, string modelo, string color, DateTime horaDeEntrada)
+        public Vehiculo(string placa, string marca, string modelo, string color, TimeOnly horaDeEntrada)
         {
             Placa = placa;
             Marca = marca;
