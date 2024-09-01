@@ -214,6 +214,7 @@ namespace PROYECTO1
 
         public void RetirarVehiculo()
         {
+            TimeOnly horaSalida = TimeOnly.FromDateTime(DateTime.Now);
             int opcionRetirar = 0;
             if (listaAutos.Count == 0 && listaMotocicletas.Count == 0 && listaCamiones.Count == 0)
             {
@@ -234,12 +235,12 @@ namespace PROYECTO1
 
             var vehiculosAEliminar = listaAutos.Concat<Vehiculo>(listaMotocicletas).Concat<Vehiculo>(listaCamiones)
                                                .Where(v => v.Placa.ToLower() == placaRetirar.ToLower()).ToList();
+            //se crea una lista temporal que concatena todas las listas para comparar las placas a la variable PlacaRetirar
 
             if (vehiculosAEliminar.Count > 0)
             {
                 foreach (var vehiculo in vehiculosAEliminar)
                 {
-                    TimeOnly horaSalida = TimeOnly.FromDateTime(DateTime.Now);
                     int horas = CalcularHorasEstacionado(horaSalida, vehiculo.HoraDeEntrada);
                     monto = horas * 10;
                     Console.WriteLine("Cantidad de horas pasadas: " + horas);
@@ -252,7 +253,7 @@ namespace PROYECTO1
                     if (confirmarPago.ToLower() == "si")
                     {
                         // Proceder con el pago
-                        ProcesoDePago(monto);
+                        ProcesoDePago(monto, vehiculo.HoraDeEntrada, horaSalida);
                         // Eliminar el vehículo de la lista correspondiente
                         EliminarVehiculo(vehiculo);
                         vehiculoEncontrado = true;
@@ -271,58 +272,46 @@ namespace PROYECTO1
                 mensaje.Continuar();
             }
         }
-        private void ProcesoDePago(decimal monto)
+        private void ProcesoDePago(decimal monto, TimeOnly horaEntrada, TimeOnly horaSalida)
         {
             int opcionPago = 0;
-            do
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("              PROCESO DE PAGO");
+            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+            Console.WriteLine("1. Pago en efectivo");
+            Console.WriteLine("2. Pago con tarjeta");
+            Console.Write("Ingresa la opción de pago: ");
+            try
             {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("              PROCESO DE PAGO");
-                Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-                Console.WriteLine("1. Pago en efectivo");
-                Console.WriteLine("2. Pago con tarjeta");
-                Console.WriteLine("3. Regresar al menú principal\n");
-                Console.Write("Ingresa la opción de pago: ");
-                try
+                opcionPago = Convert.ToInt32(Console.ReadLine());
+                switch (opcionPago)
                 {
-                    opcionPago = Convert.ToInt32(Console.ReadLine());
-                    switch (opcionPago)
-                    {
-                        case 1:
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("--------------------------------------------");
-                            Console.WriteLine("              PAGO EN EFECTIVO");
-                            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-                            Console.WriteLine("Ingresa el billete con el que pagarás: Q20");
-                            Console.WriteLine("Tu cambio es de 1 billete de Q10");
-                            mensaje.Continuar();
-                            break;
-                        case 2:
-                            Console.Clear();
-                            PagoTarjeta pagoTarjeta = new PagoTarjeta();
-                            pagoTarjeta.ProcesarPago(monto);
-                            return;
-                        case 3:
-                            Console.Clear();
-                            return; //para regresar al menú principal
-                        default:
-                            mensaje.Default();
-                            mensaje.Continuar();
-                            break;
-                    }
+                    case 1:
+                        mensaje.Continuar();
+                        PagoEfectivo pagoEfectivo = new PagoEfectivo();
+                        pagoEfectivo.ProcesarPago(monto, horaEntrada, horaSalida);
+                        return;
+                    case 2:
+                        Console.Clear();
+                        PagoTarjeta pagoTarjeta = new PagoTarjeta();
+                        pagoTarjeta.ProcesarPago(monto, horaEntrada, horaSalida);
+                        return;
+                    default:
+                        mensaje.Default();
+                        mensaje.Continuar();
+                        break;
                 }
-                catch (FormatException)
-                {
-                    mensaje.ErrorDeFormato();
-                    mensaje.Continuar();
-                }
-            } while (opcionPago != 3);
+            }
+            catch (FormatException)
+            {
+                mensaje.ErrorDeFormato();
+                mensaje.Continuar();
+            }
 
         }
-        private void EliminarVehiculo(Vehiculo vehiculo)
+        private void EliminarVehiculo(Vehiculo vehiculo) //método para eliminar un vehículo de una lista específica
         {
             if (vehiculo is Auto)
             {
@@ -346,7 +335,7 @@ namespace PROYECTO1
             return minutosRedondeados;
         }
 
-        public void VisualizarVehiculos()
+        public void VisualizarVehiculos() //método para visualzar los vehículos estacionados
         {
             if (listaAutos.Count == 0 && listaMotocicletas.Count == 0 && listaCamiones.Count == 0)
             {
@@ -390,7 +379,7 @@ namespace PROYECTO1
             mensaje.Continuar();
         }
 
-        public void EspaciosDisponibles()
+        public void EspaciosDisponibles() //método para mostrar los espacios disponibles del estacionamiento
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -411,7 +400,7 @@ namespace PROYECTO1
             Console.WriteLine($"Espacios disponibles: {espaciosCamiones}\n");
             mensaje.Continuar();
         }
-        public void Salida()
+        public void Salida() //mensaje de despedida
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;

@@ -13,7 +13,7 @@ namespace PROYECTO1
         protected DateTime FechaVencimiento {  get; set; }
         private int CVV {  get; set; }
 
-        public override bool ProcesarPago(decimal monto)
+        public override bool ProcesarPago(decimal monto, TimeOnly horaEntrada, TimeOnly horaSalida)
         {
             Mensajes mensaje = new Mensajes();
             bool validarNumTarjeta = false, validarCVV = false;
@@ -89,14 +89,15 @@ namespace PROYECTO1
                     mensaje.ErrorDeFormato(); Console.WriteLine();
                 }
             } while (!validarCVV);
-            Console.Write("Procesando pago");
-            for (int i = 0; i < 3; i++)
-            {
-                Thread.Sleep(1000); //para esperar un segundo 
-                Console.Write(".");
-            }
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("\nPago exitoso"); Console.ResetColor();
+            mensaje.ProcesandoPago();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("                  FACTURA");
+            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+            Console.WriteLine($"Nombre del titular: {nombreTitular}");
+            Console.WriteLine($"Hora de entrada: {horaEntrada}");
+            Console.WriteLine($"Hora de salida: {horaSalida}");
+            Console.WriteLine($"Monto cancelado: Q{monto}\n");
             mensaje.Continuar();
             return true;
         }

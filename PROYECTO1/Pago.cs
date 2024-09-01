@@ -8,7 +8,7 @@ namespace PROYECTO1
 {
     public class Pago
     {
-        public virtual bool ProcesarPago(decimal monto)
+        public virtual bool ProcesarPago(decimal monto, TimeOnly horaEntrada, TimeOnly horaSalida)
         {
             return true;
         }

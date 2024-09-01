@@ -33,5 +33,21 @@ namespace PROYECTO1
             Console.WriteLine("\nVehículo ingresado correctamente.");
             Console.ResetColor();
         }
+
+        public void ProcesandoPago()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("Procesando pago");
+            for (int i = 0; i < 3; i++)
+            {
+                Thread.Sleep(1000); //para esperar un segundo 
+                Console.Write(".");
+            }
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("\n\nPago exitoso");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("Pulsa ENTER para ver detalles de pago");
+            Console.ResetColor(); Console.ReadKey(); Console.Clear();
+        }
     }
 }
