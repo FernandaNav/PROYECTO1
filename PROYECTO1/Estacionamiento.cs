@@ -20,6 +20,7 @@ namespace PROYECTO1
         {
             int opcionVehiculo = 0;
             bool sideCarM = false;
+            string placaA = "", placaM = "", placaC = "";
             do
             {
                 Console.Clear();
@@ -54,8 +55,11 @@ namespace PROYECTO1
                             Console.WriteLine("-----------------------------------------");
                             Console.WriteLine("           REGISTRAR AUTO");
                             Console.WriteLine("-----------------------------------------\n"); Console.ResetColor();
-                            Console.Write("Ingresa la placa: ");
-                            string placaA = Console.ReadLine();
+                            do
+                            {
+                                Console.Write("Ingresa la placa: ");
+                                placaA = Console.ReadLine();
+                            } while (!ValidarPlaca(placaA));
                             if (PlacaExiste(placaA))
                             {
                                 Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -109,8 +113,11 @@ namespace PROYECTO1
                             Console.WriteLine("-----------------------------------------");
                             Console.WriteLine("         REGISTRAR MOTOCICLETA");
                             Console.WriteLine("-----------------------------------------\n"); Console.ResetColor();
-                            Console.Write("Ingresa la placa: ");
-                            string placaM = Console.ReadLine();
+                            do
+                            {
+                                Console.Write("Ingresa la placa: ");
+                                placaM = Console.ReadLine();
+                            } while (!ValidarPlaca(placaM));
                             if (PlacaExiste(placaM))
                             {
                                 Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -150,8 +157,11 @@ namespace PROYECTO1
                             Console.WriteLine("-----------------------------------------");
                             Console.WriteLine("           REGISTRAR CAMIÓN");
                             Console.WriteLine("-----------------------------------------\n"); Console.ResetColor();
-                            Console.Write("Ingresa la placa: ");
-                            string placaC = Console.ReadLine();
+                            do
+                            {
+                                Console.Write("Ingresa la placa: ");
+                                placaC = Console.ReadLine();
+                            } while (!ValidarPlaca(placaC));
                             if (PlacaExiste(placaC))
                             {
                                 Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -288,7 +298,7 @@ namespace PROYECTO1
             int opcionPago = 0;
             do
             {
-                Console.Clear(); Console.ForegroundColor= ConsoleColor.Yellow;
+                Console.Clear(); Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("--------------------------------------------");
                 Console.WriteLine("              PROCESO DE PAGO");
                 Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
@@ -418,6 +428,21 @@ namespace PROYECTO1
             Console.WriteLine("-------------------------------");
             Console.WriteLine("   Que tenga un buen día...");
             Console.WriteLine("-------------------------------"); Console.ResetColor();
+        }
+        private bool ValidarPlaca(string placa)
+        {
+            bool validar = false;
+            if (placa.Length == 6)
+            {
+                validar = true;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("La placa debe ser de 6 caracteres. Intenta de nuevo.\n");
+                Console.ResetColor();
+            }
+            return validar;
         }
     }
 }
