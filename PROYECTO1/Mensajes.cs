@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROYECTO1
 {
-    public class Mensajes
+    public class Mensajes //esta clase es únicamente para colocar mensajes cortos que son muy repetitivos...
     {
         public void Continuar()
         {

@@ -8,7 +8,7 @@ namespace PROYECTO1
 {
     public class Motocicleta: Vehiculo
     {
-        private bool SideCar {  get; set; }
+        protected bool SideCar {  get; set; }
 
         public Motocicleta(string placa, string marca, string modelo, string color, TimeOnly horaDeEntrada, bool sideCar) 
             :  base(placa, marca, modelo, color, horaDeEntrada)

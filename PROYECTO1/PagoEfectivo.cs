@@ -82,12 +82,12 @@ namespace PROYECTO1
             Console.WriteLine("\nCambio a devolver-------------------------"); Console.ResetColor();
             if(totalIngresado == monto)
             {
-                Console.WriteLine("Q0.00");
+                Console.WriteLine("Q0.00"); //si el total ingresado es igual que el monto a pagar, el cambio es de Q0
             }
             for (int i = 0; i < billetes.Length; i++)
             {
                 if (cantidadBilletes[i] > 0)
-                {
+                {//Con un ciclo for se mostrarán los billetes con los que se debe dar el cambio y la cantidad respectivamente.
                     Console.WriteLine($"Billetes de Q{billetes[i]}: {cantidadBilletes[i]}");
                 }
             }

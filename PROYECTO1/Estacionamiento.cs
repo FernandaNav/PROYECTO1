@@ -27,9 +27,9 @@ namespace PROYECTO1
                 Console.WriteLine("--------------------------------------------");
                 Console.WriteLine("             INGRESAR VEHÍCULO");
                 Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-                Console.WriteLine("1. Auto");
-                Console.WriteLine("2. Motocicleta");
-                Console.WriteLine("3. Camnión");
+                Console.WriteLine("1. Auto (Q15/h)");
+                Console.WriteLine("2. Motocicleta (Q10/h)");
+                Console.WriteLine("3. Camión (Q20/h)");
                 Console.WriteLine("4. Regresar al menú principal\n");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write("Ingresa el tipo de vehículo: ");
@@ -126,7 +126,7 @@ namespace PROYECTO1
                             string colorM = Console.ReadLine();
                             TimeOnly horaM = TimeOnly.FromDateTime(DateTime.Now);
                             Console.WriteLine($"Hora de entrada: {horaM}");
-                            Console.Write("¿La motocicleta tiene sidecar? (SI/NO)");
+                            Console.Write("¿La motocicleta tiene sidecar? (SI/NO): ");
                             string sideCar = Console.ReadLine();
                             if (sideCar.ToLower() == "si")
                                 sideCarM = true;
@@ -242,7 +242,18 @@ namespace PROYECTO1
                 foreach (var vehiculo in vehiculosAEliminar)
                 {
                     int horas = CalcularHorasEstacionado(horaSalida, vehiculo.HoraDeEntrada);
-                    monto = horas * 10;
+                    if (vehiculo is Auto)
+                    {
+                        monto = horas * 15;
+                    }
+                    else if (vehiculo is Motocicleta)
+                    {
+                        monto = horas * 10;
+                    }
+                    else if (vehiculo is Camion)
+                    {
+                        monto = horas * 20;
+                    }
                     Console.WriteLine("Cantidad de horas pasadas: " + horas);
                     Console.WriteLine("Monto total: Q" + monto);
 
@@ -328,10 +339,10 @@ namespace PROYECTO1
         }
 
         private int CalcularHorasEstacionado(TimeOnly horaSalida, TimeOnly horaEntrada)
-        {
+        {//calcular las horas de estacionado, aunque realmente tomo los minutos transcurridos como horas...
             TimeSpan tiempoTranscurrido = horaSalida - horaEntrada;
             double minutosTotales = tiempoTranscurrido.TotalMinutes;
-            int minutosRedondeados = (int)Math.Ceiling(minutosTotales);
+            int minutosRedondeados = (int)Math.Ceiling(minutosTotales); //para redondear los minutos al siguiente completo.
             return minutosRedondeados;
         }
 
@@ -349,7 +360,7 @@ namespace PROYECTO1
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine("          VEHÍCULOS ESTACIONADOS");
             Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-            if (listaAutos.Count > 0)
+            if (listaAutos.Count > 0) //si la lista de autos está vacía, no mostrara esta parte, funciona igual con las otras listas, respectivamente
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("AUTOS---------------------------------------\n"); Console.ResetColor();

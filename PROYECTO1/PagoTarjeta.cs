@@ -28,9 +28,9 @@ namespace PROYECTO1
                 try
                 {
                     int numeroTarjeta = Convert.ToInt32(Console.ReadLine());
-                    if (numeroTarjeta > 999999  && numeroTarjeta <10000000)
+                    if (numeroTarjeta > 999999  && numeroTarjeta <10000000) //el número de tarjeta debe ser de 7 digitos
                     {
-                        validarNumTarjeta = true;
+                        validarNumTarjeta = true; 
                     }
                 }
                 catch (FormatException)
@@ -77,7 +77,7 @@ namespace PROYECTO1
                     int cvv = Convert.ToInt32(Console.ReadLine());
                     if(cvv > 99 && cvv < 10000)
                     {
-                        validarCVV = true; Console.WriteLine();
+                        validarCVV = true; Console.WriteLine(); //el cvv debe ser de 3 o 4 digitos
                     }
                 }
                 catch (FormatException)
@@ -89,7 +89,7 @@ namespace PROYECTO1
                     mensaje.ErrorDeFormato(); Console.WriteLine();
                 }
             } while (!validarCVV);
-            mensaje.ProcesandoPago();
+            mensaje.ProcesandoPago();//esto es más que todo decoración, para que se vea más bonito...
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine("                  FACTURA");
