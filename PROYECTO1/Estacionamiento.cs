@@ -13,10 +13,10 @@ namespace PROYECTO1
         List<Auto> listaAutos = new List<Auto>();
         List<Motocicleta> listaMotocicletas = new List<Motocicleta>();
         List<Camion> listaCamiones = new List<Camion>();
-        List<Vehiculo> listaVehiculos = new List<Vehiculo>();
         Mensajes mensaje = new Mensajes();
+        PagoTarjeta pagoTarjeta = new PagoTarjeta();
 
-        public void IngresarVehiculo()
+        public void IngresarVehiculo() //método para ingresar nuevos vehículos
         {
             int opcionVehiculo = 0;
             bool sideCarM = false;
@@ -31,12 +31,12 @@ namespace PROYECTO1
                 Console.WriteLine("2. Motocicleta");
                 Console.WriteLine("3. Camnión");
                 Console.WriteLine("4. Regresar al menú principal\n");
-                Console.ForegroundColor= ConsoleColor.DarkYellow;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write("Ingresa el tipo de vehículo: ");
                 try
                 {
                     opcionVehiculo = Convert.ToInt32(Console.ReadLine());
-                    
+
                     switch (opcionVehiculo)
                     {
                         case 1:
@@ -47,6 +47,8 @@ namespace PROYECTO1
                                 mensaje.Continuar();
                                 return;
                             }
+                            bool validarCantPuertas = false;
+                            int cantidadDePuertas = 0;
                             Console.Clear();
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("-----------------------------------------");
@@ -54,6 +56,13 @@ namespace PROYECTO1
                             Console.WriteLine("-----------------------------------------\n"); Console.ResetColor();
                             Console.Write("Ingresa la placa: ");
                             string placaA = Console.ReadLine();
+                            if (PlacaExiste(placaA))
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                                Console.WriteLine("La placa ya está registrada."); //no pueden existir placas repetidas
+                                mensaje.Continuar();
+                                return;
+                            }
                             Console.Write("Ingresa la marca: ");
                             string marcaA = Console.ReadLine();
                             Console.Write("Ingresa la modelo: ");
@@ -61,12 +70,29 @@ namespace PROYECTO1
                             Console.Write("Ingresa la color: ");
                             string colorA = Console.ReadLine();
                             TimeOnly horaA = TimeOnly.FromDateTime(DateTime.Now);
-                            Console.WriteLine($"Fecha y hora de salida: {horaA}");
-                            Console.Write("Ingresa la cantidad de puertas: ");
-                            int cantidadDePuertas = Convert.ToInt32( Console.ReadLine());
+                            Console.WriteLine($"Hora de entrada: {horaA}");
+                            do
+                            {
+                                Console.Write("Ingresa la cantidad de puertas: ");
+                                try
+                                {
+                                    cantidadDePuertas = Convert.ToInt32(Console.ReadLine());
+                                    if (cantidadDePuertas > 0)
+                                    {
+                                        validarCantPuertas = true;
+                                    }
+                                }
+                                catch (FormatException)
+                                {
+                                    mensaje.ErrorDeFormato(); Console.WriteLine();
+                                }
+                                catch (OverflowException)
+                                {
+                                    mensaje.ErrorDeFormato(); Console.WriteLine();
+                                }
+                            } while (!validarCantPuertas);
                             Auto nuevoAuto = new Auto(placaA, marcaA, modeloA, colorA, horaA, cantidadDePuertas);
                             listaAutos.Add(nuevoAuto);
-                            listaVehiculos.Add(nuevoAuto);
                             mensaje.RegistroExitoso();
                             mensaje.Continuar();
                             break;
@@ -85,6 +111,13 @@ namespace PROYECTO1
                             Console.WriteLine("-----------------------------------------\n"); Console.ResetColor();
                             Console.Write("Ingresa la placa: ");
                             string placaM = Console.ReadLine();
+                            if (PlacaExiste(placaM))
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                                Console.WriteLine("La placa ya está registrada.");
+                                mensaje.Continuar();
+                                return;
+                            }
                             Console.Write("Ingresa la marca: ");
                             string marcaM = Console.ReadLine();
                             Console.Write("Ingresa la modelo: ");
@@ -92,18 +125,19 @@ namespace PROYECTO1
                             Console.Write("Ingresa la color: ");
                             string colorM = Console.ReadLine();
                             TimeOnly horaM = TimeOnly.FromDateTime(DateTime.Now);
-                            Console.WriteLine($"Fecha y hora de salida: {horaM}");
+                            Console.WriteLine($"Hora de entrada: {horaM}");
                             Console.Write("¿La motocicleta tiene sidecar? (SI/NO)");
                             string sideCar = Console.ReadLine();
                             if (sideCar.ToLower() == "si")
                                 sideCarM = true;
                             Motocicleta nuevaMoto = new Motocicleta(placaM, marcaM, modeloM, colorM, horaM, sideCarM);
                             listaMotocicletas.Add(nuevaMoto);
-                            listaVehiculos.Add(nuevaMoto);
                             mensaje.RegistroExitoso();
                             mensaje.Continuar();
                             break;
                         case 3:
+                            bool validarCapacidad = false;
+                            decimal capacidadDeCarga = 0;
                             if (listaCamiones.Count >= 1)
                             {
                                 Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -118,6 +152,13 @@ namespace PROYECTO1
                             Console.WriteLine("-----------------------------------------\n"); Console.ResetColor();
                             Console.Write("Ingresa la placa: ");
                             string placaC = Console.ReadLine();
+                            if (PlacaExiste(placaC))
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                                Console.WriteLine("La placa ya está registrada.");
+                                mensaje.Continuar();
+                                return;
+                            }
                             Console.Write("Ingresa la marca: ");
                             string marcaC = Console.ReadLine();
                             Console.Write("Ingresa la modelo: ");
@@ -125,12 +166,25 @@ namespace PROYECTO1
                             Console.Write("Ingresa la color: ");
                             string colorC = Console.ReadLine();
                             TimeOnly horaC = TimeOnly.FromDateTime(DateTime.Now);
-                            Console.WriteLine($"Fecha y hora de salida: {horaC}");
-                            Console.Write("Ingresa la capacidad de carga (kg): ");
-                            decimal capacidadDeCarga = Convert.ToDecimal(Console.ReadLine());
+                            Console.WriteLine($"Hora de entrada: {horaC}");
+                            do
+                            {
+                                Console.Write("Ingresa la capacidad de carga (kg): ");
+                                try
+                                {
+                                    capacidadDeCarga = Convert.ToDecimal(Console.ReadLine());
+                                    if (capacidadDeCarga > 0)
+                                    {
+                                        validarCapacidad = true;
+                                    }
+                                }
+                                catch (FormatException)
+                                {
+                                    mensaje.ErrorDeFormato(); Console.WriteLine();
+                                }
+                            } while (!validarCapacidad);
                             Camion nuevoCamion = new Camion(placaC, marcaC, modeloC, colorC, horaC, capacidadDeCarga);
                             listaCamiones.Add(nuevoCamion);
-                            listaVehiculos.Add(nuevoCamion);
                             mensaje.RegistroExitoso();
                             mensaje.Continuar();
                             break;
@@ -139,7 +193,8 @@ namespace PROYECTO1
                             break;
                     }
 
-                }catch (FormatException)
+                }
+                catch (FormatException)
                 {
                     mensaje.ErrorDeFormato();
                     mensaje.Continuar();
@@ -147,46 +202,81 @@ namespace PROYECTO1
             } while (opcionVehiculo != 4);
         }
 
+        private bool PlacaExiste(string placa) //método para verificar si la placa es existente
+        {
+            // Verificar en todas las listas de vehículos
+            bool existeEnAutos = listaAutos.Any(a => a.Placa.Equals(placa, StringComparison.OrdinalIgnoreCase));
+            bool existeEnMotos = listaMotocicletas.Any(m => m.Placa.Equals(placa, StringComparison.OrdinalIgnoreCase));
+            bool existeEnCamiones = listaCamiones.Any(c => c.Placa.Equals(placa, StringComparison.OrdinalIgnoreCase));
+
+            return existeEnAutos || existeEnMotos || existeEnCamiones;
+        }
+
         public void RetirarVehiculo()
         {
             int opcionRetirar = 0;
-            if (listaVehiculos.Count == 0)
+            if (listaAutos.Count == 0 && listaMotocicletas.Count == 0 && listaCamiones.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("No hay vehículos estacionados.");
                 mensaje.Continuar();
                 return;
             }
-            //do
-            //{
-                bool vehiculoEncontrado = false;
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("              RETIRAR VEHÍCULO");
-                Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-                Console.Write("Ingresa la placa del vehículo: ");
-                string placaRetirar = Console.ReadLine();
-                foreach(var vehiculo in listaVehiculos)
+            decimal monto = 0;
+            bool vehiculoEncontrado = false;
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("              RETIRAR VEHÍCULO");
+            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+            Console.Write("Ingresa la placa del vehículo: ");
+            string placaRetirar = Console.ReadLine();
+
+            var vehiculosAEliminar = listaAutos.Concat<Vehiculo>(listaMotocicletas).Concat<Vehiculo>(listaCamiones)
+                                               .Where(v => v.Placa.ToLower() == placaRetirar.ToLower()).ToList();
+
+            if (vehiculosAEliminar.Count > 0)
+            {
+                foreach (var vehiculo in vehiculosAEliminar)
                 {
-                    if (vehiculo.Placa.ToLower() == placaRetirar)
+                    TimeOnly horaSalida = TimeOnly.FromDateTime(DateTime.Now);
+                    int horas = CalcularHorasEstacionado(horaSalida, vehiculo.HoraDeEntrada);
+                    monto = horas * 10;
+                    Console.WriteLine("Cantidad de horas pasadas: " + horas);
+                    Console.WriteLine("Monto total: Q" + monto);
+
+                    // Confirmar el pago
+                    Console.Write("¿Está seguro de pagar Q" + monto + "? (SI/NO): ");
+                    string confirmarPago = Console.ReadLine();
+
+                    if (confirmarPago.ToLower() == "si")
                     {
-                        TimeOnly horaSalida = TimeOnly.FromDateTime(DateTime.Now);
-                        int horas = CalcularHorasEstacionado(horaSalida, vehiculo.HoraDeEntrada);
-                        Console.WriteLine("Cantidad de horas pasadas: "+horas);
+                        // Proceder con el pago
+                        ProcesoDePago(monto);
+                        // Eliminar el vehículo de la lista correspondiente
+                        EliminarVehiculo(vehiculo);
+                        vehiculoEncontrado = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("El proceso de pago ha sido cancelado.");
                         mensaje.Continuar();
-                        ProcesoDePago(10);
                     }
                 }
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write("Ingresa el tipo de vehículo a retirar: ");
-            //} while (opcionRetirar != 4);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("Vehículo no encontrado.");
+                mensaje.Continuar();
+            }
         }
         private void ProcesoDePago(decimal monto)
         {
             int opcionPago = 0;
             do
             {
+                Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("--------------------------------------------");
                 Console.WriteLine("              PROCESO DE PAGO");
@@ -212,29 +302,12 @@ namespace PROYECTO1
                             break;
                         case 2:
                             Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("--------------------------------------------");
-                            Console.WriteLine("              PAGO CON TARJETA");
-                            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-                            Console.Write("Ingresa el número de tarjeta: ");
-                            int numeroTarjeta = Convert.ToInt32(Console.ReadLine());
-                            Console.Write("Ingresa el nombre del titular: ");
-                            string nombreTitular = Console.ReadLine();
-                            Console.Write("Ingresa el año de vencimiento: ");
-                            int anioVencimiento = Convert.ToInt32(Console.ReadLine());
-                            Console.Write("Ingresa el mes de vencimiento: ");
-                            int mesVencimiento = Convert.ToInt32(Console.ReadLine());
-                            Console.Write("Ingresa el día de vencimiento: ");
-                            int diaVencimiento = Convert.ToInt32(Console.ReadLine());
-                            DateOnly fechaDeVencimiento = new DateOnly(anioVencimiento, mesVencimiento, diaVencimiento);
-                            Console.Write("CVV: ");
-                            int cvv = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine("proceso de pago");
-                            mensaje.Continuar();
-                            break;
+                            PagoTarjeta pagoTarjeta = new PagoTarjeta();
+                            pagoTarjeta.ProcesarPago(monto);
+                            return;
                         case 3:
                             Console.Clear();
-                            break;
+                            return; //para regresar al menú principal
                         default:
                             mensaje.Default();
                             mensaje.Continuar();
@@ -249,18 +322,33 @@ namespace PROYECTO1
             } while (opcionPago != 3);
 
         }
+        private void EliminarVehiculo(Vehiculo vehiculo)
+        {
+            if (vehiculo is Auto)
+            {
+                listaAutos.Remove(vehiculo as Auto);
+            }
+            else if (vehiculo is Motocicleta)
+            {
+                listaMotocicletas.Remove(vehiculo as Motocicleta);
+            }
+            else if (vehiculo is Camion)
+            {
+                listaCamiones.Remove(vehiculo as Camion);
+            }
+        }
 
         private int CalcularHorasEstacionado(TimeOnly horaSalida, TimeOnly horaEntrada)
         {
             TimeSpan tiempoTranscurrido = horaSalida - horaEntrada;
             double minutosTotales = tiempoTranscurrido.TotalMinutes;
-            int horasRedondeadas = (int)Math.Ceiling(minutosTotales / 60);
-            return horasRedondeadas;
+            int minutosRedondeados = (int)Math.Ceiling(minutosTotales);
+            return minutosRedondeados;
         }
 
         public void VisualizarVehiculos()
         {
-            if (listaVehiculos.Count == 0)
+            if (listaAutos.Count == 0 && listaMotocicletas.Count == 0 && listaCamiones.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("No hay vehículos estacionados.");
@@ -281,7 +369,7 @@ namespace PROYECTO1
                     auto.MostrarVehiculos(); Console.WriteLine();
                 }
             }
-            if (listaMotocicletas.Count  > 0)
+            if (listaMotocicletas.Count > 0)
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("MOTOCICLETAS--------------------------------\n"); Console.ResetColor();
@@ -290,7 +378,7 @@ namespace PROYECTO1
                     moto.MostrarVehiculos(); Console.WriteLine();
                 }
             }
-            if(listaCamiones.Count > 0)
+            if (listaCamiones.Count > 0)
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("CAMIONES------------------------------------\n"); Console.ResetColor();
@@ -309,9 +397,9 @@ namespace PROYECTO1
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine("          VEHÍCULOS ESTACIONADOS");
             Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-            Console.ForegroundColor= ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("Espacios destinados para autos: 3"); Console.ResetColor();
-            int espaciosAutos = (3-listaAutos.Count);
+            int espaciosAutos = (3 - listaAutos.Count);
             Console.WriteLine($"Espacios disponibles: {espaciosAutos}\n");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("Espacios destinados para motocicletas: 5"); Console.ResetColor();
