@@ -286,41 +286,41 @@ namespace PROYECTO1
         private void ProcesoDePago(decimal monto, TimeOnly horaEntrada, TimeOnly horaSalida)
         {
             int opcionPago = 0;
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("              PROCESO DE PAGO");
-            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-            Console.WriteLine("1. Pago en efectivo");
-            Console.WriteLine("2. Pago con tarjeta");
-            Console.Write("Ingresa la opción de pago: ");
-            try
+            do
             {
-                opcionPago = Convert.ToInt32(Console.ReadLine());
-                switch (opcionPago)
+                Console.Clear(); Console.ForegroundColor= ConsoleColor.Yellow;
+                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("              PROCESO DE PAGO");
+                Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+                Console.WriteLine("1. Pago en efectivo");
+                Console.WriteLine("2. Pago con tarjeta");
+                Console.Write("Ingresa la opción de pago: ");
+                try
                 {
-                    case 1:
-                        mensaje.Continuar();
-                        PagoEfectivo pagoEfectivo = new PagoEfectivo();
-                        pagoEfectivo.ProcesarPago(monto, horaEntrada, horaSalida);
-                        return;
-                    case 2:
-                        Console.Clear();
-                        PagoTarjeta pagoTarjeta = new PagoTarjeta();
-                        pagoTarjeta.ProcesarPago(monto, horaEntrada, horaSalida);
-                        return;
-                    default:
-                        mensaje.Default();
-                        mensaje.Continuar();
-                        break;
+                    opcionPago = Convert.ToInt32(Console.ReadLine());
+                    switch (opcionPago)
+                    {
+                        case 1:
+                            mensaje.Continuar();
+                            PagoEfectivo pagoEfectivo = new PagoEfectivo();
+                            pagoEfectivo.ProcesarPago(monto, horaEntrada, horaSalida);
+                            return;
+                        case 2:
+                            Console.Clear();
+                            PagoTarjeta pagoTarjeta = new PagoTarjeta();
+                            pagoTarjeta.ProcesarPago(monto, horaEntrada, horaSalida);
+                            return;
+                        default:
+                            mensaje.Default();
+                            break;
+                    }
                 }
-            }
-            catch (FormatException)
-            {
-                mensaje.ErrorDeFormato();
-                mensaje.Continuar();
-            }
-
+                catch (FormatException)
+                {
+                    mensaje.ErrorDeFormato();
+                    mensaje.Continuar();
+                }
+            } while (opcionPago != 2 && opcionPago != 1);
         }
         private void EliminarVehiculo(Vehiculo vehiculo) //método para eliminar un vehículo de una lista específica
         {
