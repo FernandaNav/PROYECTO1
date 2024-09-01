@@ -7,7 +7,7 @@ do
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine("--------------------------------------------");
-    Console.WriteLine("                BIENVENIDO");
+    Console.WriteLine("              EASY PARKING");
     Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
     Console.WriteLine("1. Registrar vehículo");
     Console.WriteLine("2. Retirar vehículo");
