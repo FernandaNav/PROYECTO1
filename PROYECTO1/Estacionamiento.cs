@@ -434,7 +434,7 @@ namespace PROYECTO1
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("─────▄█▀█▄──▄███▄────-\r\n────▐█░██████████▌────\r\n─────██▒█████████─────\r\n──────▀████████▀──────\r\n─────────▀██▀─────────");
-            Console.WriteLine("\n¡Que tengaS un buen día!"); Console.ResetColor();
+            Console.WriteLine("\n¡Que tenga un buen día!"); Console.ResetColor();
         }
         private bool ValidarPlaca(string placa) //método para validar el length de la placa
         {
