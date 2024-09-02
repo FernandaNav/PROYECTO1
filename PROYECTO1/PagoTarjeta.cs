@@ -16,8 +16,8 @@ namespace PROYECTO1
         public override bool ProcesarPago(decimal monto, TimeOnly horaEntrada, TimeOnly horaSalida)
         {
             Mensajes mensaje = new Mensajes();
-            bool validarNumTarjeta = false, validarCVV = false;
-            DateOnly fecha;
+            bool validarNumTarjeta = false, validarCVV = false, validarFecha = false;
+            DateOnly fecha = DateOnly.MinValue, ahora = DateOnly.FromDateTime(DateTime.Now);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine("              PAGO CON TARJETA");
@@ -30,7 +30,13 @@ namespace PROYECTO1
                     int numeroTarjeta = Convert.ToInt32(Console.ReadLine());
                     if (numeroTarjeta > 999999  && numeroTarjeta <10000000) //el número de tarjeta debe ser de 7 digitos
                     {
-                        validarNumTarjeta = true; 
+                        validarNumTarjeta = true;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor= ConsoleColor.DarkGray;
+                        Console.WriteLine("La tarjeta debe ser de 7 digitos. Intenta de nuevo.\n");
+                        Console.ResetColor();
                     }
                 }
                 catch (FormatException)
@@ -52,15 +58,7 @@ namespace PROYECTO1
                 try
                 {
                     fecha = DateOnly.ParseExact(fechaStr, "dd/MM/yyyy");
-                    if (fecha >= DateOnly.FromDateTime(DateTime.Now))
-                    {
-                        break; // Si la fecha es válida y no ha vencido, salimos del bucle
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("La tarjeta ha expirado. Intenta con otra tarjeta.\n"); Console.ResetColor();
-                    }
+                    validarFecha = true;
                 }
                 catch (FormatException)
                 {
@@ -68,7 +66,7 @@ namespace PROYECTO1
                     Console.WriteLine("Formato de fecha inválido.\n"); Console.ResetColor();
                 }
 
-            } while (true);
+            } while (!validarFecha);
             do
             {
                 Console.Write("CVV: ");
@@ -78,6 +76,12 @@ namespace PROYECTO1
                     if(cvv > 99 && cvv < 10000)
                     {
                         validarCVV = true; Console.WriteLine(); //el cvv debe ser de 3 o 4 digitos
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine("El CVV debe ser de 3 o 4 digitos. Intenta de nuevo.\n");
+                        Console.ResetColor();
                     }
                 }
                 catch (FormatException)
@@ -89,17 +93,25 @@ namespace PROYECTO1
                     mensaje.ErrorDeFormato(); Console.WriteLine();
                 }
             } while (!validarCVV);
-            mensaje.ProcesandoPago();//esto es más que todo decoración, para que se vea más bonito...
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("                  FACTURA");
-            Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
-            Console.WriteLine($"Nombre del titular: {nombreTitular}");
-            Console.WriteLine($"Hora de entrada: {horaEntrada}");
-            Console.WriteLine($"Hora de salida: {horaSalida}");
-            Console.WriteLine($"Monto cancelado: Q{monto}\n");
-            mensaje.Continuar();
-            return true;
+            if (fecha < ahora)
+            {
+                mensaje.ProcesandoPagoCancelado();
+                return false; // Si la fecha es válida y no ha vencido, salimos del bucle
+            }
+            else
+            {
+                mensaje.ProcesandoPago();//esto es más que todo decoración, para que se vea más bonito...
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("                  FACTURA");
+                Console.WriteLine("--------------------------------------------\n"); Console.ResetColor();
+                Console.WriteLine($"Nombre del titular: {nombreTitular}");
+                Console.WriteLine($"Hora de entrada: {horaEntrada}");
+                Console.WriteLine($"Hora de salida: {horaSalida}");
+                Console.WriteLine($"Monto cancelado: Q{monto}\n");
+                mensaje.Continuar();
+                return true;
+            }
         }
 
     }

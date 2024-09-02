@@ -273,10 +273,16 @@ namespace PROYECTO1
 
                     if (confirmarPago.ToLower() == "si")
                     {
-                        // Proceder con el pago
-                        ProcesoDePago(monto, vehiculo.HoraDeEntrada, horaSalida);
-                        // Eliminar el vehículo de la lista correspondiente
-                        EliminarVehiculo(vehiculo);
+                        // Proceder con el pago y eliminar vehículo si el pago es exitoso
+                        bool pagoExitoso = ProcesoDePago(monto, vehiculo.HoraDeEntrada, horaSalida);
+                        if (pagoExitoso)
+                        {
+                            EliminarVehiculo(vehiculo);
+                        }
+                        else
+                        {
+                            Console.Clear();
+                        }
                         vehiculoEncontrado = true;
                     }
                     else
@@ -293,9 +299,10 @@ namespace PROYECTO1
                 mensaje.Continuar();
             }
         }
-        private void ProcesoDePago(decimal monto, TimeOnly horaEntrada, TimeOnly horaSalida)
+        private bool ProcesoDePago(decimal monto, TimeOnly horaEntrada, TimeOnly horaSalida)
         {
             int opcionPago = 0;
+            bool pagoExitoso = false;
             do
             {
                 Console.Clear(); Console.ForegroundColor = ConsoleColor.Yellow;
@@ -313,13 +320,13 @@ namespace PROYECTO1
                         case 1:
                             mensaje.Continuar();
                             PagoEfectivo pagoEfectivo = new PagoEfectivo();
-                            pagoEfectivo.ProcesarPago(monto, horaEntrada, horaSalida);
-                            return;
+                            pagoExitoso = pagoEfectivo.ProcesarPago(monto, horaEntrada, horaSalida);
+                            return pagoExitoso;
                         case 2:
                             Console.Clear();
                             PagoTarjeta pagoTarjeta = new PagoTarjeta();
-                            pagoTarjeta.ProcesarPago(monto, horaEntrada, horaSalida);
-                            return;
+                            pagoExitoso = pagoTarjeta.ProcesarPago(monto, horaEntrada, horaSalida);
+                            return pagoExitoso;
                         default:
                             mensaje.Default();
                             break;
@@ -331,6 +338,7 @@ namespace PROYECTO1
                     mensaje.Continuar();
                 }
             } while (opcionPago != 2 && opcionPago != 1);
+            return pagoExitoso;
         }
         private void EliminarVehiculo(Vehiculo vehiculo) //método para eliminar un vehículo de una lista específica
         {
@@ -429,7 +437,7 @@ namespace PROYECTO1
             Console.WriteLine("   Que tenga un buen día...");
             Console.WriteLine("-------------------------------"); Console.ResetColor();
         }
-        private bool ValidarPlaca(string placa)
+        private bool ValidarPlaca(string placa) //método para validar el length de la placa
         {
             bool validar = false;
             if (placa.Length == 6)

@@ -49,5 +49,18 @@ namespace PROYECTO1
             Console.WriteLine("Pulsa ENTER para ver detalles de pago");
             Console.ResetColor(); Console.ReadKey(); Console.Clear();
         }
+        public void ProcesandoPagoCancelado()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("Procesando pago");
+            for (int i = 0; i < 3; i++)
+            {
+                Thread.Sleep(1000); //para esperar un segundo 
+                Console.Write(".");
+            }
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nLa fecha de vencimiento ya ha pasado.\n");
+            Continuar();
+        }
     }
 }
